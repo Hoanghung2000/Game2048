@@ -7,7 +7,7 @@ constexpr int N = 5, M = 5,
               WIDTH = N*TILESIZE,
               HEIGHT = M*TILESIZE;
 bool game_win = false;
-int MAP[N][M];
+int MANG[N][M];
 enum class Direction
 {
     Left,
@@ -22,7 +22,7 @@ sf::Vector2i vitri()
     {
         v.x = rand()%N;
         v.y = rand()%N;
-        if (MAP[v.y][v.x] == 0)
+        if (MANG[v.y][v.x] == 0)
             break;
     }
     return v;
@@ -38,13 +38,13 @@ int genNewTile()
         return 4;
 }
 
-//vị trí xuat hien của các số
+//vị trí mới xuat hien của các số
 void placeNewTile()
 {
     sf::Vector2i p = vitri();
-    MAP[p.y][p.x] = genNewTile();
+    MANG[p.y][p.x] = genNewTile();
 }
-
+//ham dich chuyen
 void shift(Direction d)
 {
     bool didShift = 0;
@@ -53,29 +53,29 @@ void shift(Direction d)
         for (int j=0; j<M; j++)
         {
             for (int i=0; i<N-1; i++)
-                if (MAP[i][j] == 0)
+                if (MANG[i][j] == 0)
                 {
                     bool change = 0;
                     for (int k=i; k<N-1; k++)
                     {
-                        MAP[k][j] = MAP[k+1][j];
-                        if (MAP[k][j] != 0)
+                        MANG[k][j] = MANG[k+1][j];
+                        if (MANG[k][j] != 0)
                         {
                             didShift = 1;
                             change = 1;
                         }
                     }
-                    MAP[N-1][j] = 0;
+                    MANG[N-1][j] = 0;
                     if (change) i--;
                 }
             for (int i=0; i<N-1; i++)
-                if (MAP[i][j] == MAP[i+1][j] && MAP[i][j] != 0)
+                if (MANG[i][j] == MANG[i+1][j] && MANG[i][j] != 0)
                 {
                     didShift = 1;
                     for (int k=i; k<N-1; k++)
-                        MAP[k][j] = MAP[k+1][j];
-                    MAP[N-1][j] = 0;
-                    MAP[i][j] *= 2;
+                        MANG[k][j] = MANG[k+1][j];
+                    MANG[N-1][j] = 0;
+                    MANG[i][j] *= 2;
                 }
         }
     }
@@ -84,29 +84,29 @@ void shift(Direction d)
         for (int i=0; i<N; i++)
         {
             for (int j=0; j<M-1; j++)
-                if (MAP[i][j] == 0)
+                if (MANG[i][j] == 0)
                 {
                     bool change = 0;
                     for (int k=j; k<M-1; k++)
                     {
-                        MAP[i][k] = MAP[i][k+1];
-                        if (MAP[i][k] != 0)
+                        MANG[i][k] = MANG[i][k+1];
+                        if (MANG[i][k] != 0)
                         {
                             didShift = 1;
                             change = 1;
                         }
                     }
-                    MAP[i][M-1] = 0;
+                    MANG[i][M-1] = 0;
                     if (change) j--;
                 }
             for (int j=0; j<N-1; j++)
-                if (MAP[i][j] == MAP[i][j+1] && MAP[i][j] != 0)
+                if (MANG[i][j] == MANG[i][j+1] && MANG[i][j] != 0)
                 {
                     didShift = 1;
                     for (int k=j; k<M-1; k++)
-                        MAP[i][k] = MAP[i][k+1];
-                    MAP[i][M-1] = 0;
-                    MAP[i][j] *= 2;
+                        MANG[i][k] = MANG[i][k+1];
+                    MANG[i][M-1] = 0;
+                    MANG[i][j] *= 2;
                 }
         }
     }
@@ -115,29 +115,29 @@ void shift(Direction d)
         for (int j=0; j<M; j++)
         {
             for (int i=N-1; i>=0; i--)
-                if (MAP[i][j] == 0)
+                if (MANG[i][j] == 0)
                 {
                     bool change = 0;
                     for (int k=i; k>0; k--)
                     {
-                        MAP[k][j] = MAP[k-1][j];
-                        if (MAP[k][j] != 0)
+                        MANG[k][j] = MANG[k-1][j];
+                        if (MANG[k][j] != 0)
                         {
                             didShift = 1;
                             change = 1;
                         }
                     }
-                    MAP[0][j] = 0;
+                    MANG[0][j] = 0;
                     if (change) i++;
                 }
             for (int i=N-1; i>0; i--)
-                if (MAP[i][j] == MAP[i-1][j] && MAP[i][j] != 0)
+                if (MANG[i][j] == MANG[i-1][j] && MANG[i][j] != 0)
                 {
                     didShift = 1;
                     for (int k=i; k>=0; k--)
-                        MAP[k][j] = MAP[k-1][j];
-                    MAP[0][j] = 0;
-                    MAP[i][j] *= 2;
+                        MANG[k][j] = MANG[k-1][j];
+                    MANG[0][j] = 0;
+                    MANG[i][j] *= 2;
                 }
         }
     }
@@ -146,29 +146,29 @@ void shift(Direction d)
         for (int i=0; i<N; i++)
         {
             for (int j=M-1; j>=0; j--)
-                if (MAP[i][j] == 0)
+                if (MANG[i][j] == 0)
                 {
                     bool change = 0;
                     for (int k=j; k>0; k--)
                     {
-                        MAP[i][k] = MAP[i][k-1];
-                        if (MAP[i][k] != 0)
+                        MANG[i][k] = MANG[i][k-1];
+                        if (MANG[i][k] != 0)
                         {
                             didShift = 1;
                             change = 1;
                         }
                     }
-                    MAP[i][0] = 0;
+                    MANG[i][0] = 0;
                     if (change) j++;
                 }
             for (int j=M-1; j>0; j--)
-                if (MAP[i][j] == MAP[i][j-1] && MAP[i][j] != 0)
+                if (MANG[i][j] == MANG[i][j-1] && MANG[i][j] != 0)
                 {
                     didShift = 1;
                     for (int k=j; k>0; k--)
-                        MAP[i][k] = MAP[i][k-1];
-                    MAP[i][0] = 0;
-                    MAP[i][j] *= 2;
+                        MANG[i][k] = MANG[i][k-1];
+                    MANG[i][0] = 0;
+                    MANG[i][j] *= 2;
                 }
         }
     }
@@ -234,7 +234,7 @@ int main()
         if (!game_win)
             for (int i=0; i<N; i++)
                 for (int j=0; j<M; j++)
-                    if (MAP[i][j] == 2049)
+                    if (MANG[i][j] == 2049)
                     {
                         game_win = 1;
                         break;
@@ -243,62 +243,62 @@ int main()
         for (int i=0; i<M; i++)
             for (int j=0; j<N; j++)
             {
-                if (MAP[i][j] == 0)
+                if (MANG[i][j] == 0)
                 {
                     sprite_blank.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_blank);
                 }
-                else if (MAP[i][j] == 2)
+                else if (MANG[i][j] == 2)
                 {
                     sprite_2.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_2);
                 }
-                else if (MAP[i][j] == 4)
+                else if (MANG[i][j] == 4)
                 {
                     sprite_4.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_4);
                 }
-                else if (MAP[i][j] == 8)
+                else if (MANG[i][j] == 8)
                 {
                     sprite_8.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_8);
                 }
-                else if (MAP[i][j] == 16)
+                else if (MANG[i][j] == 16)
                 {
                     sprite_16.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_16);
                 }
-                else if (MAP[i][j] == 32)
+                else if (MANG[i][j] == 32)
                 {
                     sprite_32.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_32);
                 }
-                else if (MAP[i][j] == 64)
+                else if (MANG[i][j] == 64)
                 {
                     sprite_64.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_64);
                 }
-                else if (MAP[i][j] == 128)
+                else if (MANG[i][j] == 128)
                 {
                     sprite_128.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_128);
                 }
-                else if (MAP[i][j] == 256)
+                else if (MANG[i][j] == 256)
                 {
                     sprite_256.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_256);
                 }
-                else if (MAP[i][j] == 512)
+                else if (MANG[i][j] == 512)
                 {
                     sprite_512.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_512);
                 }
-                else if (MAP[i][j] == 1024)
+                else if (MANG[i][j] == 1024)
                 {
                     sprite_1024.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_1024);
                 }
-                else if (MAP[i][j] == 2048)
+                else if (MANG[i][j] == 2048)
                 {
                     sprite_2048.setPosition(j*TILESIZE, i*TILESIZE);
                     window.draw(sprite_2048);
